@@ -26,10 +26,16 @@ jobs:
     - name: Execution Smoke Test
       run: |
         cd backend
-        # Start uvicorn in the background
-        nohup uvicorn app:app --host 0.0.0.0 --port 8000 &
+        # Start uvicorn in the background and log output
+        nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
         # Wait for server to start
-        sleep 5
+        sleep 10
+        # Check if the server is still running
+        if ! ps -p $! > /dev/null; then
+          echo "Server failed to start. Logs:"
+          cat uvicorn.log
+          exit 1
+        fi
         # Verify if the API is responding
-        curl -f http://127.0.0.1:8000/ || exit 1
+        curl -f http://127.0.0.1:8000/ || (echo "Curl failed. Logs:" && cat uvicorn.log && exit 1)
         echo "Backend successfully executed in GitHub Actions!"
