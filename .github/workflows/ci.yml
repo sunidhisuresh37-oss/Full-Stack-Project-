@@ -23,6 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         # Use CPU-only torch to save space and time in CI
         pip install torch --index-url https://download.pytorch.org/whl/cpu
+        pip install scikit-learn pennylane
         if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
         pip list
 
