@@ -5,6 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch: # Allows manual execution from the GitHub UI
 
 jobs:
   build-and-test:
