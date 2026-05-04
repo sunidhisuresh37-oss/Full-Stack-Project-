@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="E-Learning Platform with Test Analytics powered by ML, DL, and QML.">
+    <title>NextGen E-Learning Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">EduQuantum AI</div>
+        <ul class="nav-links">
+            <li><a href="#dashboard">My Courses</a></li>
+            <li><a href="#analytics">Test Analytics</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <header class="hero">
+            <h1>Elevate Your Learning with AI</h1>
+            <p>Welcome to your student dashboard. Progress is now <strong>automatically tracked</strong> via our Live SQLite Database!</p>
+        </header>
+
+        <!-- E-Learning Courses Section -->
+        <section id="dashboard" class="dashboard-section">
+            <h2 class="section-title">My Enrolled Courses</h2>
+            <div class="courses-grid" id="courses-container">
+                <!-- Courses will be rendered here by app.js from the DB -->
+            </div>
+        </section>
+
+        <!-- Test Analytics Section -->
+        <section id="analytics" class="analytics-section">
+            <h2 class="section-title">AI Test Analytics & Predictions</h2>
+            <div class="cards-section">
+                <!-- ML Card -->
+                <div class="card glass">
+                    <h2>Score Prediction (ML)</h2>
+                    <p>Predict your next test score. <br><small style="color:var(--accent-color)">*Study Hours & Previous Scores are automatically fetched from the Database.*</small></p>
+                    <div class="input-group">
+                        <label for="ml-course-select">Select Course:</label>
+                        <select id="ml-course-select">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <button class="btn primary" onclick="predictML()">Predict Course Score</button>
+                    <div id="ml-result" class="result"></div>
+                </div>
+
+                <!-- DL Card -->
+                <div class="card glass">
+                    <h2>Feedback Sentiment (DL)</h2>
+                    <p>Analyze your sentiment towards the course material.</p>
+                    <div class="input-group">
+                        <label for="dl-course-select">Course to Review:</label>
+                        <select id="dl-course-select">
+                             <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="feedback">Your Course Feedback:</label>
+                        <textarea id="feedback" rows="3">This course was excellent and very clear.</textarea>
+                    </div>
+                    <button class="btn secondary" onclick="predictDL()">Analyze Feedback</button>
+                    <div id="dl-result" class="result"></div>
+                </div>
+
+                <!-- QML Card -->
+                <div class="card glass">
+                    <h2>Learning Pattern (QML)</h2>
+                    <p>Advanced classification of your engagement using Quantum ML. <br><small style="color:var(--accent-color)">*Login Frequency & Completion Rates fetched from DB.*</small></p>
+                    <div class="input-group">
+                        <label for="qml-course-select">Select Course:</label>
+                        <select id="qml-course-select">
+                             <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <button class="btn accent" onclick="predictQML()">Classify Engagement Pattern</button>
+                    <div id="qml-result" class="result"></div>
+                </div>
+            </div>
+        <!-- AI Study Tips Section -->
+        <section id="tips" class="tips-section">
+            <h2 class="section-title">Personalized AI Study Tips</h2>
+            <div id="tips-container" class="tips-grid">
+                <div class="tip-card glass">
+                    <p><em>Select a course prediction above to get personalized AI tips!</em></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 NextGen E-Learning Analytics. Developed using Agile Methodologies.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
