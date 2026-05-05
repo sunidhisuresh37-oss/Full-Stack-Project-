@@ -26,12 +26,20 @@ jobs:
         pip install torch --index-url https://download.pytorch.org/whl/cpu
         # Pinning compatible versions to fix the NumpyMimic AttributeError
         pip install "pennylane==0.35.1" "autoray==0.6.12"
-        pip install scikit-learn
+        pip install scikit-learn pylint
         if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
         pip list
 
-    - name: Debug File Structure
-      run: ls -R
+    - name: Run PyLint
+      run: |
+        echo "Running pylint on backend models..."
+        # We allow some warnings/errors so it doesn't fail the build unnecessarily if the code isn't perfect yet
+        pylint --exit-zero backend/models/
+
+    - name: Run PyUnit (unittest)
+      run: |
+        echo "Running PyUnit (unittest) unit tests..."
+        python -m unittest discover -s tests -p "test_*.py"
 
     - name: Execution Smoke Test
       run: |

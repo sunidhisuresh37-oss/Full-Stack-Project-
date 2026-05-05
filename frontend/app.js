@@ -152,42 +152,46 @@ async function predictQML() {
 // Load data automatically when the page loads
 window.onload = loadDashboard;
 
-function generateStudyTips(course, score, source) {
+async function generateStudyTips(course, score, source) {
     const container = document.getElementById('tips-container');
-    let tips = [];
-
-    if (score < 50) {
-        tips = [
-            `Critically low prediction for <strong>${course}</strong>. We recommend starting with the "Foundations" module.`,
-            `Schedule a 1-on-1 session with a mentor to clarify core concepts.`,
-            `AI Suggestion: Increase study time by at least 5 hours per week.`
-        ];
-    } else if (score < 80) {
-        tips = [
-            `Solid progress in <strong>${course}</strong>, but there's room for improvement.`,
-            `Focus on practical exercises and previous test papers to boost your score.`,
-            `AI Suggestion: Review the last 3 video lectures to reinforce learning.`
-        ];
-    } else {
-        tips = [
-            `Outstanding prediction for <strong>${course}</strong>! You are performing at an Advanced level.`,
-            `Try the "Challenge Exercises" to push your boundaries further.`,
-            `AI Suggestion: Consider becoming a peer mentor for this course.`
-        ];
-    }
-
+    
     container.innerHTML = `
         <div class="tip-card glass" style="grid-column: 1 / -1; border-left-color: var(--primary-color)">
             <span class="tip-badge">${source} Prediction Insight</span>
-            <p>Based on your <strong>${score}%</strong> predicted performance in <strong>${course}</strong>, the AI recommends:</p>
+            <p>Based on your <strong>${score}%</strong> predicted performance in <strong>${course}</strong>, our RNN is analyzing your sequence pattern...</p>
         </div>
     `;
 
-    tips.forEach(tip => {
-        container.innerHTML += `
-            <div class="tip-card glass">
-                <p>${tip}</p>
+    try {
+        const response = await fetch(`${API_BASE}/predict/rnn_tips`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ course_name: course, score: score })
+        });
+        
+        if(!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        const tips = data.tips;
+
+        container.innerHTML = `
+            <div class="tip-card glass" style="grid-column: 1 / -1; border-left-color: var(--primary-color)">
+                <span class="tip-badge">${source} + RNN Sequence Analysis</span>
+                <p>Based on your <strong>${score}%</strong> predicted performance in <strong>${course}</strong>, the RNN analyzed your sequence data and recommends:</p>
             </div>
         `;
-    });
+
+        tips.forEach(tip => {
+            container.innerHTML += `
+                <div class="tip-card glass">
+                    <p>${tip}</p>
+                </div>
+            `;
+        });
+    } catch (error) {
+        container.innerHTML += `
+            <div class="tip-card glass" style="border-left-color: #ef4444;">
+                <p>Failed to load RNN tips. Ensure the backend is running.</p>
+            </div>
+        `;
+    }
 }

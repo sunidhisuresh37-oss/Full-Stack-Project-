@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from models import ml_model, dl_model, qml_model
+from models import ml_model, dl_model, qml_model, rnn_model
 import database
 
 app = FastAPI(title="E-Learning Analytics API")
@@ -23,6 +23,10 @@ class TextData(BaseModel):
     course_name: str
     feedback: str
     student_id: int = 1
+
+class RNNTipRequest(BaseModel):
+    course_name: str
+    score: float
 
 @app.get("/")
 def read_root():
@@ -71,3 +75,8 @@ def predict_qml(data: CourseRequest):
         "classification_result": classification,
         "data_used_from_db": {"login_frequency": stats["login_frequency"], "video_completion_rate": stats["video_completion_rate"]}
     }
+
+@app.post("/predict/rnn_tips")
+def predict_rnn_tips(data: RNNTipRequest):
+    tips = rnn_model.generate_study_tips(data.course_name, data.score)
+    return {"model": "RNN (NumPy)", "tips": tips}
