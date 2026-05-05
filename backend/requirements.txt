@@ -5,3 +5,6 @@ scikit-learn
 pennylane
 numpy
 python-multipart
+pandas
+mlflow
+dvc
