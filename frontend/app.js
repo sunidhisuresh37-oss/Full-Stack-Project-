@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'http://localhost:30008';
 
 const courseIcons = {
     'Introduction to Deep Learning': '🤖',
